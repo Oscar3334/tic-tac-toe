@@ -2,12 +2,6 @@ from tkinter import *
 from tkinter import ttk
 
 class Game:
-    grid = None
-    buttonGrid = None
-    movesLeft = 0
-    isXmove = True
-    frm = None
-    
     def __init__(self, root):
         self.frm = ttk.Frame(root)
         self.frm.grid()
@@ -23,6 +17,7 @@ class Game:
         self.reset()
         
     def reset(self):
+        isXmove = True
         self.grid = [
             [0, 0, 0],
             [0, 0, 0],
