@@ -9,8 +9,8 @@ class Game:
         self.buttonGrid = [
             [Button(self.frm, width = 2, height = 0, relief=FLAT
                 , font = ("New Times Roman", 80, "bold")
-                , borderwidth = 0, background = "white"
-                , highlightthickness = 0)
+                , borderwidth = 1, background = "white"
+                , highlightthickness = 1)
                 for j in range(3)] for i in range(3)]
         for i in range(3):
             for j in range(3):
@@ -78,6 +78,7 @@ class Game:
         func = None
         candidate = None
         xMove = self.isXmove
+        print("max" if xMove else "min")
         if xMove:
             candidate = (-1, -1, -1000)
             func = lambda *x: max(x, key=lambda a: a[2])
@@ -90,7 +91,7 @@ class Game:
                     print("X", end = " ")
                     continue
                 grid[i][j] = 1 if xMove else 2
-                candidate = func(candidate, (i, j, (e:=self.minimax(grid,not xMove, not xMove))))
+                candidate = func(candidate, (i, j, (e:=self.minimax(grid, xMove, not xMove))))
                 grid[i][j] = 0
                 print(e, end = " ")
             print("")
