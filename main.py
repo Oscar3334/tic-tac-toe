@@ -14,9 +14,17 @@ class Game:
                 for j in range(3)] for i in range(3)]
         for i in range(3):
             for j in range(3):
-                self.buttonGrid[i][j].grid(column = j, row = i, padx=5, pady=5)
+                self.buttonGrid[i][j].grid(column = j, row = i+1, padx=5, pady=5)
                 self.buttonGrid[i][j].config(
                     command = (lambda a,b: lambda: self.move(a,b))(i,j))
+        self.aiWins = 0
+        self.playerWins = 0
+        self.aiWinDisplay = Label(self.frm, text="Ai: 0", bg="white")
+        self.endStateDisplay = Label(self.frm, text="", bg="white")
+        self.playerWinDisplay = Label(self.frm, text="Player: 0", bg="white")
+        self.aiWinDisplay.grid(column = 0, row = 0)
+        self.endStateDisplay.grid(column = 1, row = 0)
+        self.playerWinDisplay.grid(column = 2, row = 0)
         self.reset()
         
     def reset(self):
@@ -30,6 +38,7 @@ class Game:
         for row in self.buttonGrid:
             for btn in row:
                 btn.config(text=" ")
+        self.endStateDisplay.config(text=f"{'X' if self.isXmove else 'O'} to move")
 
     def move(self, row, col):
         if self.movesLeft == 0:
@@ -45,14 +54,20 @@ class Game:
             self.grid[row][col] = 2
         if (e:=self.checkWin()) != 0:
             if e == 1:
-                print("X wins!")
+                self.endStateDisplay.config(text="Player wins!")
+                self.playerWins += 1
+                self.playerWinDisplay.config(text=f"Player: {self.playerWins}")
                 self.movesLeft = 0
             elif e == 2:
-                print("O wins!")
+                self.endStateDisplay.config(text="Ai wins!")
+                self.aiWins += 1
+                self.aiWinDisplay.config(text=f"Ai: {self.aiWins}")
                 self.movesLeft = 0
             else:
-                print("Tie! No winner.")
+                self.endStateDisplay.config(text="Tie! No winner.")
+            return
         self.isXmove = not self.isXmove
+        self.endStateDisplay.config(text=f"{'X' if self.isXmove else 'O'} to move")
         if self.isAi and not self.isXmove:
             self.move(*self.findNextMove())
 
@@ -78,7 +93,6 @@ class Game:
         func = None
         candidate = None
         xMove = self.isXmove
-        print("max" if xMove else "min")
         if xMove:
             candidate = (-1, -1, -1000)
             func = lambda *x: max(x, key=lambda a: a[2])
@@ -88,14 +102,10 @@ class Game:
         for i in range(3):
             for j in range(3):
                 if grid[i][j] != 0: 
-                    print("X", end = " ")
                     continue
                 grid[i][j] = 1 if xMove else 2
                 candidate = func(candidate, (i, j, (e:=self.minimax(grid, xMove, not xMove))))
                 grid[i][j] = 0
-                print(e, end = " ")
-            print("")
-        print(candidate)
         return candidate[:2]
     
     def minimax(self, grid, isMin, isXmove) -> int:
