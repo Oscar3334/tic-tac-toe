@@ -1,4 +1,5 @@
 from tkinter import *
+#from PIL import Image, ImageTk
 from copy import copy
 
 class Game:
@@ -6,6 +7,9 @@ class Game:
         self.isAi = isAi
         self.frm = Frame(root, background = "white")
         self.frm.grid()
+        #self.BlankImage = Image.open("blank.bmp")
+        #self.XImage = Image.open("X.bmp")
+        #self.OImage = Image.open("O.bmp")
         self.buttonGrid = [
             [Button(self.frm, width = 2, height = 0, relief=FLAT
                 , font = ("New Times Roman", 80, "bold")
