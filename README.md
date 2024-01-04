@@ -1,2 +1,2 @@
 # tic-tac-toe
-Making tic-Tac-Toe using using tkinter
+A simple tic-tac-toe game using Tkinter in python and implementing the minimax algorithm for a simple AI.
